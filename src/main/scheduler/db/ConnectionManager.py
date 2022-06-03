@@ -6,10 +6,10 @@ import os
 class ConnectionManager:
 
     def __init__(self):
-        self.server_name =  "tatka-server.database.windows.net"#os.getenv("Server") + ".database.windows.net"
-        self.db_name = "vaccine-resources"#os.getenv("DBName")
-        self.user = "ltatka"#os.getenv("UserID")
-        self.password = "Fall2019"#os.getenv("Password")
+        self.server_name =  os.getenv("Server") + ".database.windows.net"
+        self.db_name = os.getenv("DBName")
+        self.user = os.getenv("UserID")
+        self.password = os.getenv("Password")
         self.conn = None
 
     def create_connection(self):
