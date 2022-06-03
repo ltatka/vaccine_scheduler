@@ -71,8 +71,8 @@ class Caregiver:
         conn = cm.create_connection()
         cursor = conn.cursor(as_dict=True)
 
-        # VALUES: Time, Username, isReserved, ApptID, Name
-        add_availability = "INSERT INTO Availabilities VALUES (%s , %s, 0, NULL, NULL);"
+        # VALUES: Time, Username, ApptID, Name
+        add_availability = "INSERT INTO Availabilities VALUES (%s , %s, NULL, NULL);"
         appt_exists = "SELECT COUNT(*) AS total FROM Availabilities WHERE Username=%s AND Time=%s;"
         try:
             cursor.execute(appt_exists, (self.username, d))

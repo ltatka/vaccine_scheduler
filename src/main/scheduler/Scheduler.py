@@ -263,13 +263,6 @@ def get_vaccine_inventory(name=None):
     cm = ConnectionManager()
     conn = cm.create_connection()
     cursor = conn.cursor(as_dict=True)
-    query = "SELECT SUM(Doses) as total FROM Vaccines;"
-    cursor.execute(query)
-    total = None
-    for row in cursor:
-        total = row['total']
-    if total == 0:
-        return None
     if name:
         query = "SELECT Name, Doses FROM Vaccines WHERE Name=%s"
         cursor.execute(query, name)
@@ -318,7 +311,7 @@ def reserve(tokens):
         print("Invalid vaccine name, try again.")
         return
     inventory = get_vaccine_inventory(name=vaccine_name)
-    if not inventory:
+    if inventory[vaccine_name] == 0:
         print(f"There are no {vaccine_name} vaccines available at this time. Try again later or select a different "
               f"vaccine.")
         return
@@ -392,10 +385,14 @@ def upload_availability(tokens):
 
     date = tokens[1]
     # assume input is hyphenated in the format mm-dd-yyyy
-    date_tokens = date.split("-")
-    month = int(date_tokens[0])
-    day = int(date_tokens[1])
-    year = int(date_tokens[2])
+    try:
+        date_tokens = date.split("-")
+        month = int(date_tokens[0])
+        day = int(date_tokens[1])
+        year = int(date_tokens[2])
+    except:
+        print("Invalid date format. Please try again!")
+        return
     try:
         d = datetime.datetime(year, month, day)
         current_caregiver.upload_availability(d)
